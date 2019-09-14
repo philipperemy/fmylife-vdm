@@ -47,10 +47,18 @@ def fetch_all_articles_for_page(website, page_id=1):
         for smiley in article.find_all('img', {'class': 'icon_smiley_art'}):
             smiley_names.append(smiley.attrs['alt'])
         num_comments = article.find('div', {'class': 'action-item action-link'}).find('a').contents[0].strip()
-        author = article.find('div', {'class': 'article-topbar'}).contents[0].strip().split('\n')[-1]
-        date_and_loc = article.find('div', {'class': 'article-topbar'}).contents[-1].strip().replace('\n', '')[1:]
-        date = date_and_loc.split('-')[0].strip()
-        loc = ' '.join(date_and_loc.split('-')[1:]).strip().replace('   ', ' ').replace('  ', ' ')
+
+        top_bar = article.find('div', {'class': 'article-topbar'}).text.strip().split('-')
+        div = [a.replace('\n', ' ').strip() for a in top_bar]
+        author = div[0]
+        if author == 'Par' or author == 'By':
+            author = ''
+        if author.startswith('Par '):
+            author = author.replace('Par ', '')
+        if author.startswith('By '):
+            author = author.replace('By ', '')
+        date = div[1]
+        loc = ' '.join(div[2:]).replace('  ', ' ')
         gender = 'male' if article.find('i', {'class': 'fa fa-male'}) is not None else 'female'
         json_article = {
             'article_link': article_link,
