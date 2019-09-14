@@ -1,13 +1,24 @@
 import json
 import os
+from argparse import ArgumentParser
 
 import requests
 from bs4 import BeautifulSoup
 
 
-def fetch_all_articles_for_page(page_id=1):
-    # url = 'https://www.fmylife.com/?page={}'.format(page_id)
-    url = 'https://www.viedemerde.fr/?page={}'.format(page_id)
+def get_script_arguments():
+    args = ArgumentParser()
+    args.add_argument('--website', required=True, choices=['vdm', 'fmylife'])
+    return args.parse_args()
+
+
+def fetch_all_articles_for_page(website, page_id=1):
+    if website == 'vdm':
+        url = 'https://www.viedemerde.fr/?page={}'.format(page_id)
+    elif website == 'fmylife':
+        url = 'https://www.fmylife.com/?page={}'.format(page_id)
+    else:
+        raise Exception('Unknown website.')
     print('Fetching {} ... '.format(url), end='')
     resp = requests.get(url)
     assert resp.status_code == 200
@@ -61,7 +72,8 @@ def fetch_all_articles_for_page(page_id=1):
 
 
 def main():
-    output_dir = 'output'
+    args = get_script_arguments()
+    output_dir = args.website
     print('Dumping everything in {}'.format(output_dir))
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -70,7 +82,7 @@ def main():
         if os.path.isfile(output_filename):
             print('{} already exists. Skipping.'.format(output_filename))
             continue
-        results = fetch_all_articles_for_page(page_id=page_id)
+        results = fetch_all_articles_for_page(args.website, page_id)
         if len(results) == 0:
             print('Finished.')
             exit(1)
