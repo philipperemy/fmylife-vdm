@@ -82,7 +82,7 @@ def fetch_all_articles_for_page(website, page_id=1):
 def main():
     args = get_script_arguments()
     output_dir = args.website
-    print('Dumping everything in {}'.format(output_dir))
+    print('Dumping everything in {}.'.format(output_dir))
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     for page_id in range(1, 100000):
