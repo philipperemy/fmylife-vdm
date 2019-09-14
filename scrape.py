@@ -6,7 +6,8 @@ from bs4 import BeautifulSoup
 
 
 def fetch_all_articles_for_page(page_id=1):
-    url = 'https://www.fmylife.com/?page={}'.format(page_id)
+    # url = 'https://www.fmylife.com/?page={}'.format(page_id)
+    url = 'https://www.viedemerde.fr/?page={}'.format(page_id)
     print('Fetching {} ... '.format(url), end='')
     resp = requests.get(url)
     assert resp.status_code == 200
