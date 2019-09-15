@@ -12,7 +12,7 @@ def read_file():
     input_filename = sys.argv[1]
     with open(input_filename, 'r', encoding='utf8') as r:
         m = json.load(r)
-    maxlen = 80
+    maxlen = 75
     max_features = 20_000
     batch_size = 32
 
@@ -46,8 +46,8 @@ def read_file():
 
     print('Build model...')
     model = Sequential()
-    model.add(Embedding(max_features, 128))
-    model.add(LSTM(128, dropout=0.2, recurrent_dropout=0.2))
+    model.add(Embedding(max_features, 48))
+    model.add(LSTM(48, dropout=0.5, recurrent_dropout=0.5))
     model.add(Dense(1, activation='sigmoid'))
 
     # try using different optimizers and different optimizer configs
